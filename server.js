@@ -21,13 +21,23 @@ app.get('/', (req, res) => {
 })
 
 app.get('/:room', (req, res) =>{
-    res.render('room', { roomID : req.params.room })
+    if(req.params.room == 'exit')
+    {
+        res.render('exit')
+    }
+    else{
+        res.render('room', { roomID : req.params.room })
+    }
 })
 
 io.on('connection', socket =>{
     socket.on('join-room', (roomID, userID) => {
         socket.join(roomID)
         socket.to(roomID).emit('user-connected', userID)
+
+        socket.on('disconnect', () => {
+            socket.to(roomID).emit('user-disconnected', userID)
+        })
     })
 })
 
