@@ -11,11 +11,12 @@ navigator.mediaDevices
   })
   .then((stream) => {
     addVideoStream(myVideo, stream)
-    myVideo.classList.add('p-5')
+    myVideo.classList.add('local-video')
 
     myPeer.on('call', call => {
       call.answer(stream)
       const video = document.createElement('video')
+      video.classList.add('remote-video')
       call.on('stream', userVideoStream => {
         addVideoStream(video, userVideoStream)
       })
@@ -39,7 +40,7 @@ myPeer.on('open', id => {
 function connectToNewUser(userId, stream) {
   const call = myPeer.call(userId, stream)
   const video = document.createElement('video')
-  video.classList.add('m-5')
+  video.classList.add('remote-video')
   call.on('stream', (userVideoStream) => {
     addVideoStream(video, userVideoStream)
   })
